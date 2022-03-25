@@ -1,14 +1,14 @@
 const helperWrapper = require("../../helper/wrapper");
-const movieModel = require("./movieModel");
+const scheduleModel = require("./scheduleModel");
 
 module.exports = {
-  getAllMovie: async (request, response) => {
+  getAllSchedule: async (request, response) => {
     try {
-      let { page, limit, sort, search } = request.query;
+      let { page, limit, searchMovieId, searchLocation, sort } = request.query;
       page = Number(page);
       limit = Number(limit);
       const offset = page * limit - limit;
-      const totalData = await movieModel.getCountMovie();
+      const totalData = await scheduleModel.getCountSchedule();
       const totalPage = Math.ceil(totalData / limit);
       const pageInfo = {
         page,
@@ -16,7 +16,13 @@ module.exports = {
         limit,
         totalData,
       };
-      const result = await movieModel.getAllMovie(limit, offset, sort, search);
+      const result = await scheduleModel.getAllSchedule(
+        limit,
+        offset,
+        searchMovieId,
+        searchLocation,
+        sort
+      );
       return helperWrapper.response(
         response,
         200,
@@ -25,14 +31,13 @@ module.exports = {
         pageInfo
       );
     } catch (error) {
-      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
-  getMovieById: async (request, response) => {
+  getScheduleById: async (request, response) => {
     try {
       const { id } = request.params;
-      const result = await movieModel.getMovieById(id);
+      const result = await scheduleModel.getScheduleById(id);
 
       if (result.length <= 0) {
         return helperWrapper.response(
@@ -50,15 +55,20 @@ module.exports = {
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
-  createMovie: async (request, response) => {
+  createSchedule: async (request, response) => {
     try {
-      const { name, category, synopsis } = request.body;
+      const { movieId, premiere, price, location, dateStart, dateEnd, time } =
+        request.body;
       const setData = {
-        name,
-        category,
-        synopsis,
+        movieId,
+        premiere,
+        price,
+        location,
+        dateStart,
+        dateEnd,
+        time,
       };
-      const result = await movieModel.createMovie(setData);
+      const result = await scheduleModel.createSchedule(setData);
       return helperWrapper.response(
         response,
         200,
@@ -66,16 +76,18 @@ module.exports = {
         result
       );
     } catch (error) {
+      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
-  updateMovie: async (request, response) => {
+  updateSchedule: async (request, response) => {
     try {
       //   response.status(200);
       //   response.send("hello world");
       const { id } = request.params;
-      const { name, category, synopsis } = request.body;
-      const resultt = await movieModel.getMovieById(id);
+      const { movieId, premiere, price, location, dateStart, dateEnd, time } =
+        request.body;
+      const resultt = await scheduleModel.getScheduleById(id);
 
       if (resultt.length <= 0) {
         return helperWrapper.response(
@@ -86,9 +98,13 @@ module.exports = {
         );
       }
       const newData = {
-        name,
-        category,
-        synopsis,
+        movieId,
+        premiere,
+        price,
+        location,
+        dateStart,
+        dateEnd,
+        time,
         updatedAt: new Date(Date.now()),
       };
       for (const data in newData) {
@@ -96,7 +112,7 @@ module.exports = {
           delete newData[data];
         }
       }
-      const result = await movieModel.updateMovie(id, newData);
+      const result = await scheduleModel.updateSchedule(id, newData);
       return helperWrapper.response(
         response,
         200,
@@ -107,10 +123,10 @@ module.exports = {
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
-  deleteMovie: async (request, response) => {
+  deleteSchedule: async (request, response) => {
     try {
       const { id } = request.params;
-      const resultt = await movieModel.getMovieById(id);
+      const resultt = await scheduleModel.getScheduleById(id);
 
       if (resultt.length <= 0) {
         return helperWrapper.response(
@@ -120,7 +136,7 @@ module.exports = {
           null
         );
       }
-      const result = await movieModel.deleteMovie(id);
+      const result = await scheduleModel.deleteSchedule(id);
       return helperWrapper.response(
         response,
         200,

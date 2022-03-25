@@ -1,10 +1,10 @@
 const connection = require("../../config/mysql");
 
 module.exports = {
-  getCountMovie: () =>
+  getCountSchedule: () =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT COUNT(*) AS total FROM movie",
+        "SELECT COUNT(*) AS total FROM schedule",
         (error, result) => {
           if (!error) {
             resolve(result[0].total);
@@ -14,25 +14,24 @@ module.exports = {
         }
       );
     }),
-  getAllMovie: (limit, offset, sort, search) =>
+  getAllSchedule: (limit, offset, searchMovieId, searchLocation, sort) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM movie WHERE name like '%${search}%' ORDER BY ${sort} LIMIT ? OFFSET ?`,
+        `SELECT * FROM schedule WHERE id like '%${searchMovieId}%' WHERE location like '%${searchLocation}%' ORDER BY ${sort} LIMIT ? OFFSET ?`,
         [limit, offset],
         (error, result) => {
           if (!error) {
             resolve(result);
-            console.log(typeof sort);
           } else {
             reject(new Error(error.sqlMessage));
           }
         }
       );
     }),
-  getMovieById: (id) =>
+  getScheduleById: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT * FROM movie WHERE id=?",
+        "SELECT * FROM schedule WHERE id=?",
         id,
         (error, result) => {
           if (!error) {
@@ -43,29 +42,24 @@ module.exports = {
         }
       );
     }),
-  createMovie: (data) =>
+  createSchedule: (data) =>
     new Promise((resolve, reject) => {
-      const query = connection.query(
-        "INSERT INTO movie SET ?",
-        data,
-        (error, result) => {
-          if (!error) {
-            const newResult = {
-              id: result.insertId,
-              ...data,
-            };
-            resolve(newResult);
-          } else {
-            reject(new Error(error.sqlMessage));
-          }
+      connection.query("INSERT INTO schedule SET ?", data, (error, result) => {
+        if (!error) {
+          const newResult = {
+            id: result.insertId,
+            ...data,
+          };
+          resolve(newResult);
+        } else {
+          reject(new Error(error.sqlMessage));
         }
-      );
-      console.log(query.sql);
+      });
     }),
-  updateMovie: (id, data) =>
+  updateSchedule: (id, data) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "UPDATE movie SET ? WHERE id = ?",
+        "UPDATE schedule SET ? WHERE id = ?",
         [data, id],
         (error) => {
           if (!error) {
@@ -80,9 +74,9 @@ module.exports = {
         }
       );
     }),
-  deleteMovie: (id) =>
+  deleteSchedule: (id) =>
     new Promise((resolve, reject) => {
-      connection.query("DELETE FROM movie WHERE id=?", id, (error) => {
+      connection.query("DELETE FROM schedule WHERE id=?", id, (error) => {
         if (!error) {
           resolve(id);
         } else {
