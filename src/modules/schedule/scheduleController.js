@@ -7,6 +7,11 @@ module.exports = {
       let { page, limit, searchMovieId, searchLocation, sort } = request.query;
       page = Number(page);
       limit = Number(limit);
+      page = page || 1;
+      limit = limit || 3;
+      sort = sort || "RAND()";
+      searchMovieId = searchMovieId || "";
+      searchLocation = searchLocation || "";
       const offset = page * limit - limit;
       const totalData = await scheduleModel.getCountSchedule();
       const totalPage = Math.ceil(totalData / limit);
@@ -31,6 +36,7 @@ module.exports = {
         pageInfo
       );
     } catch (error) {
+      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
@@ -76,14 +82,11 @@ module.exports = {
         result
       );
     } catch (error) {
-      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
   updateSchedule: async (request, response) => {
     try {
-      //   response.status(200);
-      //   response.send("hello world");
       const { id } = request.params;
       const { movieId, premiere, price, location, dateStart, dateEnd, time } =
         request.body;
@@ -107,6 +110,7 @@ module.exports = {
         time,
         updatedAt: new Date(Date.now()),
       };
+      // eslint-disable-next-line no-restricted-syntax
       for (const data in newData) {
         if (!newData) {
           delete newData[data];

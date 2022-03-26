@@ -7,6 +7,10 @@ module.exports = {
       let { page, limit, sort, search } = request.query;
       page = Number(page);
       limit = Number(limit);
+      page = page || 1;
+      limit = limit || 3;
+      sort = sort || "RAND()";
+      search = search || "";
       const offset = page * limit - limit;
       const totalData = await movieModel.getCountMovie();
       const totalPage = Math.ceil(totalData / limit);
@@ -25,7 +29,6 @@ module.exports = {
         pageInfo
       );
     } catch (error) {
-      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
@@ -43,19 +46,28 @@ module.exports = {
         );
       }
       return helperWrapper.response(response, 200, "succes get data !", result);
-
-      //   response.status(200);
-      //   response.send("hello world");
     } catch (error) {
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
   createMovie: async (request, response) => {
     try {
-      const { name, category, synopsis } = request.body;
+      const {
+        name,
+        category,
+        releaseDate,
+        cast,
+        director,
+        duration,
+        synopsis,
+      } = request.body;
       const setData = {
         name,
         category,
+        releaseDate,
+        cast,
+        director,
+        duration,
         synopsis,
       };
       const result = await movieModel.createMovie(setData);
@@ -71,10 +83,16 @@ module.exports = {
   },
   updateMovie: async (request, response) => {
     try {
-      //   response.status(200);
-      //   response.send("hello world");
       const { id } = request.params;
-      const { name, category, synopsis } = request.body;
+      const {
+        name,
+        category,
+        releaseDate,
+        cast,
+        director,
+        duration,
+        synopsis,
+      } = request.body;
       const resultt = await movieModel.getMovieById(id);
 
       if (resultt.length <= 0) {
@@ -88,9 +106,14 @@ module.exports = {
       const newData = {
         name,
         category,
+        releaseDate,
+        cast,
+        director,
+        duration,
         synopsis,
         updatedAt: new Date(Date.now()),
       };
+      // eslint-disable-next-line no-restricted-syntax
       for (const data in newData) {
         if (!newData) {
           delete newData[data];

@@ -5,11 +5,12 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const compression = require("compression");
 const bodyParser = require("body-parser");
+require("dotenv").config();
 //----
 const routerNavigation = require("./routes/index");
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT;
 
 // midleware
 app.use(morgan("dev"));

@@ -10,9 +10,4 @@ Router.post("/", scheduleController.createSchedule);
 Router.patch("/:id", scheduleController.updateSchedule);
 Router.delete("/:id", scheduleController.deleteSchedule);
 
-// Router.get("/hello", (request, response) => {
-//   response.status(200);
-//   response.send("hello world");
-// });
-
 module.exports = Router;

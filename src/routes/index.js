@@ -4,13 +4,12 @@ const Router = express.Router();
 
 const movieRoutes = require("../modules/movie/movieRoutes");
 const scheduleRoutes = require("../modules/schedule/scheduleRoutes");
+const bookingRoutes = require("../modules/booking/bookingRoutes");
 
 Router.use("/movie", movieRoutes);
 Router.use("/schedule", scheduleRoutes);
-
-// Router.get("/hello", (request, response) => {
-//   response.status(200);
-//   response.send("hello world");
-// });
+Router.use("/booking", bookingRoutes);
 
 module.exports = Router;
+
+/// https://tickitzz.herokuapp.com
