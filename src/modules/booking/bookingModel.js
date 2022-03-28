@@ -7,7 +7,6 @@ module.exports = {
         if (!error) {
           const newResult = {
             id: result.insertId,
-            ...data,
           };
           resolve(newResult);
         } else {
@@ -17,13 +16,37 @@ module.exports = {
     }),
   createBookingSeat: (data) =>
     new Promise((resolve, reject) => {
+      connection.query("INSERT INTO bookingseat SET ?", data, (error) => {
+        if (!error) {
+          resolve();
+        } else {
+          reject(new Error(error.sqlMessage));
+        }
+      });
+    }),
+  getBookingById: (id) =>
+    new Promise((resolve, reject) => {
       connection.query(
-        "INSERT INTO bookingseat SET ?",
-        data,
+        "SELECT * FROM booking WHERE id=?",
+        id,
         (error, result) => {
           if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(error.sqlMessage));
+          }
+        }
+      );
+    }),
+  updateStatusBooking: (id, data) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE booking SET ? WHERE id = ?",
+        [data, id],
+        (error) => {
+          if (!error) {
             const newResult = {
-              id: result.insertId,
+              id,
               ...data,
             };
             resolve(newResult);
@@ -33,64 +56,70 @@ module.exports = {
         }
       );
     }),
-  //   getBookingByIdBooking: () =>
-  //     new Promise((resolve, reject) => {
-  //       connection.query(
-  //         "SELECT COUNT(*) AS total FROM booking",
-  //         (error, result) => {
-  //           if (!error) {
-  //             resolve(result[0].total);
-  //           } else {
-  //             reject(new Error(error.sqlMessage));
-  //           }
-  //         }
-  //       );
-  //     }),
-  //   getSeatBooking: (limit, offset, searchMovieId, searchLocation, sort) =>
-  //     new Promise((resolve, reject) => {
-  //       connection.query(
-  //         // yang tertampil id nya adalah id dari movie
-  //         `SELECT * FROM booking FULL JOIN movie ON movieId = movie.idformovie WHERE location like '%${searchLocation}%' AND movieId like '%${searchMovieId}%' ORDER BY ${sort} LIMIT ? OFFSET ?`,
-  //         [limit, offset],
-  //         (error, result) => {
-  //           if (!error) {
-  //             resolve(result);
-  //           } else {
-  //             reject(new Error(error.sqlMessage));
-  //           }
-  //         }
-  //       );
-  //     }),
-  //   getDashboardBooking: (id) =>
-  //     new Promise((resolve, reject) => {
-  //       connection.query(
-  //         "SELECT * FROM booking WHERE id=?",
-  //         id,
-  //         (error, result) => {
-  //           if (!error) {
-  //             resolve(result);
-  //           } else {
-  //             reject(new Error(error.sqlMessage));
-  //           }
-  //         }
-  //       );
-  //     }),
-  //   updateStatusBooking: (id, data) =>
-  //     new Promise((resolve, reject) => {
-  //       connection.query(
-  //         "UPDATE booking SET ? WHERE id = ?",
-  //         [data, id],
-  //         (error) => {
-  //           if (!error) {
-  //             const newResult = {
-  //               id,
-  //               ...data,
-  //             };
-  //             resolve(newResult);
-  //           } else {
-  //             reject(new Error(error.sqlMessage));
-  //           }
-  //         }
-  //       );
-  //     }),
+
+  getBookingByIdBooking: (id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT 
+        bk.id,
+        bk.scheduleId,
+        bk.dateBooking,
+        bk.timeBooking,
+        bk.totalTicket,
+        bk.totalPayment,
+        bk.paymentMethod,
+        bk.statusPayment,
+        bk.statusUsed,
+        bks.seat,
+        bk.createdAt,
+        bk.updatedAt,
+        mv.name,
+        mv.category
+        FROM booking AS bk JOIN bookingSeat AS bks ON bk.id=bks.bookingId
+        JOIN schedule AS sc ON bk.scheduleId = sc.id 
+        JOIN movie AS mv ON sc.movieId = mv.Id WHERE bk.id =?  `,
+        id,
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(error.sqlMessage));
+          }
+        }
+      );
+    }),
+  getSeatBooking: (scheduleId, dateBooking, timeBooking) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT seat FROM booking AS bk
+        JOIN bookingseat  AS bks ON bk.id = bks.bookingId  
+        WHERE bk.dateBooking=?
+        AND bk.timeBooking=? AND bk.scheduleId=?`,
+        [dateBooking, timeBooking, scheduleId],
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(error.sqlMessage));
+          }
+        }
+      );
+    }),
+  getDashboardBooking: (scheduleId, premiere, location) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT MONTH(bk.createdAt) AS month, SUM(bk.totalPayment) AS total
+         FROM booking AS bk JOIN schedule AS sc ON bk.ScheduleId = sc.id
+         WHERE sc.id=${scheduleId} AND location=? AND premiere=? 
+         GROUP BY MONTH(bk.createdAt)`,
+        [location, premiere],
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(error.sqlMessage));
+          }
+        }
+      );
+    }),
 };

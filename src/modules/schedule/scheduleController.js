@@ -13,14 +13,7 @@ module.exports = {
       searchMovieId = searchMovieId || "";
       searchLocation = searchLocation || "";
       const offset = page * limit - limit;
-      const totalData = await scheduleModel.getCountSchedule();
-      const totalPage = Math.ceil(totalData / limit);
-      const pageInfo = {
-        page,
-        totalPage,
-        limit,
-        totalData,
-      };
+
       const result = await scheduleModel.getAllSchedule(
         limit,
         offset,
@@ -28,6 +21,12 @@ module.exports = {
         searchLocation,
         sort
       );
+      const pageInfo = {
+        page,
+        totalPage: Math.ceil(result.length / limit),
+        limit,
+        totalData: result.length,
+      };
       return helperWrapper.response(
         response,
         200,
@@ -36,7 +35,6 @@ module.exports = {
         pageInfo
       );
     } catch (error) {
-      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
@@ -54,9 +52,6 @@ module.exports = {
         );
       }
       return helperWrapper.response(response, 200, "succes get data !", result);
-
-      //   response.status(200);
-      //   response.send("hello world");
     } catch (error) {
       return helperWrapper.response(response, 400, "bad request", null);
     }

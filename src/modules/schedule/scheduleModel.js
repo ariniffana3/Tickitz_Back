@@ -17,18 +17,28 @@ module.exports = {
   getAllSchedule: (limit, offset, searchMovieId, searchLocation, sort) =>
     new Promise((resolve, reject) => {
       connection.query(
-        //  kalo pake full join yang tertampil id nya adalah id dari movie tapi createdAt tetap tertampil semua
-        // kalo nama kolom di db diganti bisa tertampil semua
-        // jika `SELECT sc.id, mv.id FROM schedule AS sc FULL error nya di full join
-        // setelah ON tidak bisa menggunakan schedule.movieId
-        //  `SELECT * FROM  schedule FULL JOIN  movie ON movieId = movie.id WHERE location like '%${searchLocation}%' AND movieId like '%${searchMovieId}%' ORDER BY ${sort} LIMIT ? OFFSET ?`,
-        // `SELECT * FROM  schedule JOIN  movie WHERE location like '%${searchLocation}%' AND movieId like '%${searchMovieId}%' ORDER BY ${sort} LIMIT ? OFFSET ?`,
-        // schedule.id tidak bisa digunakan
-        // as juga tidak bisa digunakan karena akan error di selanjutnya
-        // jika movie.id bisa berjalan karena from nya atau tuan rumahnya itu shedule, tapi kalo id saja tidak bisa dibilang id dari scedule
-        // tapi kalo pake schedule.id ga bisa
-        `SELECT * FROM schedule  FULL JOIN movie  ON movieId = movie.id WHERE location like '%${searchLocation}%' AND movieId like '%${searchMovieId}%' ORDER BY ${sort} LIMIT ? OFFSET ?`,
-        [limit, offset],
+        // SELECT * FROM schedule  FULL JOIN movie  ON movieId = movie.id WHERE location like '%${searchLocation}%' AND movieId like '%${searchMovieId}%' ORDER BY ${sort} LIMIT ? OFFSET ?
+        `SELECT 
+        sc.id,
+        sc.movieId,
+        sc.premiere,
+        sc.price,
+        sc.location,
+        sc.dateStart,
+        sc.dateEnd,
+        sc.time,
+        sc.createdAt,
+        sc.updatedAt,
+        mv.name,
+        mv.category,
+        mv.director,
+        mv.cast,
+        mv.releaseDate,
+        mv.duration,
+        mv.synopsis
+        FROM schedule AS sc JOIN movie AS mv  
+        ON sc.movieId = mv.id WHERE location like '%${searchLocation}%' AND movieId=? ORDER BY ${sort} LIMIT ? OFFSET ?`,
+        [searchMovieId, limit, offset],
         (error, result) => {
           if (!error) {
             resolve(result);
