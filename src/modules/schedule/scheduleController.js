@@ -13,7 +13,16 @@ module.exports = {
       searchMovieId = searchMovieId || "";
       searchLocation = searchLocation || "";
       const offset = page * limit - limit;
-
+      const count = await scheduleModel.getCountSchedule(
+        searchMovieId,
+        searchLocation
+      );
+      const pageInfo = {
+        page,
+        totalPage: Math.ceil(count / limit),
+        limit,
+        totalData: count.length,
+      };
       const result = await scheduleModel.getAllSchedule(
         limit,
         offset,
@@ -21,12 +30,14 @@ module.exports = {
         searchLocation,
         sort
       );
-      const pageInfo = {
-        page,
-        totalPage: Math.ceil(result.length / limit),
-        limit,
-        totalData: result.length,
-      };
+      if (result.length <= 0) {
+        return helperWrapper.response(
+          response,
+          404,
+          `Data by searchMovieId= ${searchMovieId}, searchLocation${searchLocation} not found`,
+          null
+        );
+      }
       return helperWrapper.response(
         response,
         200,

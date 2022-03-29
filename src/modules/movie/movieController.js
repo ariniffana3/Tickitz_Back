@@ -4,15 +4,15 @@ const movieModel = require("./movieModel");
 module.exports = {
   getAllMovie: async (request, response) => {
     try {
-      let { page, limit, sort, search } = request.query;
+      let { page, limit, sort, searchName } = request.query;
       page = Number(page);
       limit = Number(limit);
       page = page || 1;
       limit = limit || 3;
       sort = sort || "RAND()";
-      search = search || "";
+      searchName = searchName || "";
       const offset = page * limit - limit;
-      const totalData = await movieModel.getCountMovie();
+      const totalData = await movieModel.getCountMovie(searchName);
       const totalPage = Math.ceil(totalData / limit);
       const pageInfo = {
         page,
@@ -20,7 +20,20 @@ module.exports = {
         limit,
         totalData,
       };
-      const result = await movieModel.getAllMovie(limit, offset, sort, search);
+      const result = await movieModel.getAllMovie(
+        limit,
+        offset,
+        sort,
+        searchName
+      );
+      if (result.length <= 0) {
+        return helperWrapper.response(
+          response,
+          404,
+          `Data by searchName = ${searchName} not found`,
+          null
+        );
+      }
       return helperWrapper.response(
         response,
         200,
@@ -56,7 +69,7 @@ module.exports = {
         name,
         category,
         releaseDate,
-        cast,
+        casts,
         director,
         duration,
         synopsis,
@@ -65,7 +78,7 @@ module.exports = {
         name,
         category,
         releaseDate,
-        cast,
+        casts,
         director,
         duration,
         synopsis,
@@ -88,7 +101,7 @@ module.exports = {
         name,
         category,
         releaseDate,
-        cast,
+        casts,
         director,
         duration,
         synopsis,
@@ -99,7 +112,7 @@ module.exports = {
         return helperWrapper.response(
           response,
           404,
-          `Data by Id${id} not found`,
+          `Data by Id= ${id} not found`,
           null
         );
       }
@@ -107,7 +120,7 @@ module.exports = {
         name,
         category,
         releaseDate,
-        cast,
+        casts,
         director,
         duration,
         synopsis,
@@ -139,7 +152,7 @@ module.exports = {
         return helperWrapper.response(
           response,
           404,
-          `Data by Id ${id} not found`,
+          `Data by Id = ${id} not found`,
           null
         );
       }

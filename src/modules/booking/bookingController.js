@@ -12,13 +12,13 @@ module.exports = {
         totalTicket: data.seat.length,
         totalPayment: data.totalPayment,
         paymentMethod: data.paymentMethod,
-        statusPayment: "succes",
+        statusPayment: "success",
       };
       const result = await bookingModel.createBooking(dataCreateBooking);
       data.seat.map(async (item) => {
         const bookingSeat = {
           bookingId: result.id,
-          seat: data.seat[item],
+          seat: item,
         };
         await bookingModel.createBookingSeat(bookingSeat);
       });
@@ -40,7 +40,7 @@ module.exports = {
         return helperWrapper.response(
           response,
           404,
-          `Data by Id${id} not found`,
+          `Data by Id = ${id} not found`,
           null
         );
       }
@@ -90,6 +90,9 @@ module.exports = {
         timeBooking
       );
       result = result.map((item) => item.seat);
+      if (result.length <= 0) {
+        return helperWrapper.response(response, 404, `Data not found`, null);
+      }
       return helperWrapper.response(response, 200, "succes get data !", result);
     } catch (error) {
       return helperWrapper.response(response, 400, "bad request", null);
@@ -103,7 +106,9 @@ module.exports = {
         premiere,
         location
       );
-
+      if (result.length <= 0) {
+        return helperWrapper.response(response, 404, `Data not found`, null);
+      }
       return helperWrapper.response(response, 200, "succes get data !", result);
     } catch (error) {
       return helperWrapper.response(response, 400, "bad request", null);
