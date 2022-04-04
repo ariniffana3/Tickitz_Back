@@ -17,7 +17,7 @@
 
 ## How to run the app ?
 
-1. Download this repository
+1. Clone this repository
 2. open in your code editor
 3. Type `npm install`
 4. Make new file a called **.env**, set up first [here](#set-up-env-file)
