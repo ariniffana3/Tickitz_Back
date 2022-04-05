@@ -4,17 +4,12 @@ const bookingModel = require("./bookingModel");
 module.exports = {
   createBooking: async (request, response) => {
     try {
-      const data = request.body;
-      const dataCreateBooking = {
-        scheduleId: data.scheduleId,
-        dateBooking: data.dateBooking,
-        timeBooking: data.timeBooking,
-        totalTicket: data.seat.length,
-        totalPayment: data.totalPayment,
-        paymentMethod: data.paymentMethod,
+      let data = request.body;
+      data = {
+        ...data,
         statusPayment: "success",
       };
-      const result = await bookingModel.createBooking(dataCreateBooking);
+      const result = await bookingModel.createBooking(data);
       data.seat.map(async (item) => {
         const bookingSeat = {
           bookingId: result.id,
@@ -59,13 +54,31 @@ module.exports = {
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
+  getBookingByUserId: async (request, response) => {
+    try {
+      const { id } = request.params;
+      const result = await bookingModel.getBookingByUserId(id);
+
+      if (result.length <= 0) {
+        return helperWrapper.response(
+          response,
+          404,
+          `Data by Id ${id} not found`,
+          null
+        );
+      }
+
+      return helperWrapper.response(response, 200, "succes get data !", result);
+    } catch (error) {
+      return helperWrapper.response(response, 400, "bad request", null);
+    }
+  },
   getBookingByIdBooking: async (request, response) => {
     try {
       const { id } = request.params;
-      const resultt = await bookingModel.getBookingById(id);
       let data = await bookingModel.getBookingByIdBooking(id);
 
-      if (resultt.length <= 0 || data.length <= 0) {
+      if (data.length <= 0) {
         return helperWrapper.response(
           response,
           404,

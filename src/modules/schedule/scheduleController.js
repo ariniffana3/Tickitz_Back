@@ -1,5 +1,6 @@
 const helperWrapper = require("../../helper/wrapper");
 const scheduleModel = require("./scheduleModel");
+const redis = require("../../config/redis");
 
 module.exports = {
   getAllSchedule: async (request, response) => {
@@ -38,6 +39,11 @@ module.exports = {
           null
         );
       }
+      redis.setEx(
+        `getSchedule:${JSON.stringify(request.query)}`,
+        3600,
+        JSON.stringify({ result, pageInfo })
+      );
       return helperWrapper.response(
         response,
         200,
@@ -62,6 +68,7 @@ module.exports = {
           null
         );
       }
+      redis.setEx(`getSchedule:${id}`, 3600, JSON.stringify(result));
       return helperWrapper.response(response, 200, "succes get data !", result);
     } catch (error) {
       return helperWrapper.response(response, 400, "bad request", null);
@@ -118,7 +125,7 @@ module.exports = {
       };
       // eslint-disable-next-line no-restricted-syntax
       for (const data in newData) {
-        if (!newData) {
+        if (!newData[data]) {
           delete newData[data];
         }
       }

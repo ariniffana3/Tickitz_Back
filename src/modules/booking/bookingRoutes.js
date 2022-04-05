@@ -9,5 +9,6 @@ Router.patch("/ticket/:id", bookingController.updateStatusBooking);
 Router.get("/id/:id", bookingController.getBookingByIdBooking);
 Router.get("/seat/", bookingController.getSeatBooking);
 Router.get("/dashboard/", bookingController.getDashboardBooking);
+Router.get("/user/:id", bookingController.getBookingByUserId);
 
 module.exports = Router;

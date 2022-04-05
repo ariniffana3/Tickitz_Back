@@ -21,17 +21,13 @@ app.use(xss());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extend: false }));
 app.use(bodyParser.json());
+app.use(express.static("public"));
 //---
 app.use("/", routerNavigation);
 
 app.use("/*", (request, response) => {
   response.status(404).send("path not found !");
 });
-
-// app.get("/hello", (request, response) => {
-//   response.status(200);
-//   response.send("hello world");
-// });
 
 app.listen(port, () => {
   console.log(`Express app is listen on port ${port} !`);

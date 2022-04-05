@@ -38,6 +38,37 @@ module.exports = {
         }
       );
     }),
+  getBookingByUserId: (id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT 
+        bk.id,
+        bk.scheduleId,
+        bk.dateBooking,
+        bk.timeBooking,
+        bk.totalTicket,
+        bk.totalPayment,
+        bk.paymentMethod,
+        bk.statusPayment,
+        bk.statusUsed,
+        bks.seat,
+        bk.createdAt,
+        bk.updatedAt,
+        mv.name,
+        mv.category
+        FROM booking AS bk JOIN bookingSeat AS bks ON bk.id=bks.bookingId
+        JOIN schedule AS sc ON bk.scheduleId = sc.id 
+        JOIN movie AS mv ON sc.movieId = mv.Id WHERE bk.userId =?  `,
+        id,
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(error.sqlMessage));
+          }
+        }
+      );
+    }),
   updateStatusBooking: (id, data) =>
     new Promise((resolve, reject) => {
       connection.query(
