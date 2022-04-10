@@ -1,3 +1,4 @@
+const { uuidv4 } = require("uuid");
 const helperWrapper = require("../../helper/wrapper");
 const bookingModel = require("./bookingModel");
 const helperMidtrans = require("../../helper/midtrans");
@@ -20,10 +21,20 @@ module.exports = {
         };
         await bookingModel.createBookingSeat(bookingSeat);
       });
-      return helperWrapper.response(response, 200, "Success create data !", {
-        ...result,
-        ...data,
+      const setDataMidtrans = {
+        id: uuidv4(),
+        total: 100000,
+      };
+      const resultMidtrans = await helperMidtrans.post(setDataMidtrans);
+      return helperWrapper.response(response, 200, "Success post data !", {
+        id: 1,
+        ...request.body,
+        redirectUrl: resultMidtrans.redirect_url,
       });
+      // return helperWrapper.response(response, 200, "Success create data !", {
+      //   ...result,
+      //   ...data,
+      // });
     } catch (error) {
       return helperWrapper.response(response, 400, "bad request", null);
     }
@@ -74,6 +85,7 @@ module.exports = {
 
       return helperWrapper.response(response, 200, "succes get data !", result);
     } catch (error) {
+      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
@@ -97,6 +109,7 @@ module.exports = {
       data.length > 1 ? (data = { ...data[0], seat }) : data;
       return helperWrapper.response(response, 200, "succes get data !", data);
     } catch (error) {
+      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },

@@ -58,12 +58,13 @@ module.exports = {
         mv.category
         FROM booking AS bk JOIN bookingSeat AS bks ON bk.id=bks.bookingId
         JOIN schedule AS sc ON bk.scheduleId = sc.id 
-        JOIN movie AS mv ON sc.movieId = mv.Id WHERE bk.userId =?  `,
-        id,
+        JOIN movie AS mv ON sc.movieId = mv.Id WHERE bk.userId =${id}  `,
+        // id,
         (error, result) => {
           if (!error) {
             resolve(result);
           } else {
+            console.log(error);
             reject(new Error(error.sqlMessage));
           }
         }
@@ -108,13 +109,14 @@ module.exports = {
         FROM booking AS bk
         JOIN bookingSeat AS bks ON bk.id=bks.bookingId 
         JOIN schedule AS sc ON bk.scheduleId = sc.id 
-        JOIN movie AS mv ON sc.movieId = mv.Id WHERE bk.Id = ?`,
-        id,
+        JOIN movie AS mv ON sc.movieId = mv.Id WHERE bk.Id = ${id}`,
+        // id,
         // SELECT bk.id, bk.scheduleId, bk.dateBooking, bk.timeBooking, bk.totalTicket, bk.totalPayment, bk.paymentMethod, bk.statusPayment, bk.statusUsed, bks.seat, bk.createdAt, bk.updatedAt, mv.name, mv.category FROM booking AS bk JOIN bookingSeat AS bks ON bk.id=bks.bookingId JOIN schedule AS sc ON bk.scheduleId = sc.id JOIN movie AS mv ON sc.movieId = mv.Id WHERE bk.Id =3;
         (error, result) => {
           if (!error) {
             resolve(result);
           } else {
+            console.log(error);
             reject(new Error(error.sqlMessage));
           }
         }

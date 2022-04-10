@@ -29,6 +29,7 @@ module.exports = Router;
 // user belum ditambahkan auth-----sudah
 // tambahkan di postman notification untuk midtrans
 // update profile id nya ambil dari token ?
+// id midtrans
 
 // ini sebagai admin
 // create movie----sudah diperbaiki blm di up
