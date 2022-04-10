@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const helperWrapper = require("../../helper/wrapper");
 const userModel = require("./userModel");
 const cloudinary = require("../../config/cloudinary");
+const redis = require("../../config/redis");
 
 module.exports = {
   getUserByUserId: async (request, response) => {
@@ -148,11 +149,14 @@ module.exports = {
         updatedAt: new Date(Date.now()),
       };
 
+      const token = request.headers.authorization;
+      redis.setEx(`accessToken:${token}`, 3600 * 24, token);
+
       const result = await userModel.updateProfile(id, newData);
       return helperWrapper.response(
         response,
         200,
-        "succes update data !",
+        "succes update data !, You're log out now",
         result
       );
     } catch (error) {

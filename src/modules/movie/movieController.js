@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require("uuid");
 const redis = require("../../config/redis");
 const helperWrapper = require("../../helper/wrapper");
 const movieModel = require("./movieModel");
@@ -112,6 +113,7 @@ module.exports = {
         synopsis,
       } = request.body;
       const setData = {
+        id: uuidv4(),
         name,
         category,
         releaseDate,

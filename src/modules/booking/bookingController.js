@@ -1,4 +1,4 @@
-const { uuidv4 } = require("uuid");
+const { v4: uuidv4 } = require("uuid");
 const helperWrapper = require("../../helper/wrapper");
 const bookingModel = require("./bookingModel");
 const helperMidtrans = require("../../helper/midtrans");
@@ -8,33 +8,35 @@ module.exports = {
     try {
       const data = request.body;
       const dataCreate = {
+        id: uuidv4(),
         ...data,
         totalTicket: data.seat.length,
-        statusPayment: "success",
+        statusPayment: "Yet Paid",
       };
       delete dataCreate.seat;
       const result = await bookingModel.createBooking(dataCreate);
       data.seat.map(async (item) => {
         const bookingSeat = {
+          id: uuidv4(),
           bookingId: result.id,
           seat: item,
         };
         await bookingModel.createBookingSeat(bookingSeat);
       });
       const setDataMidtrans = {
-        id: uuidv4(),
+        id: result.id,
         total: 100000,
       };
       const resultMidtrans = await helperMidtrans.post(setDataMidtrans);
+
+      const redirectUrl = { redirectUrl: resultMidtrans.redirect_url };
+      await bookingModel.updateStatusBooking(result.id, redirectUrl);
+
       return helperWrapper.response(response, 200, "Success post data !", {
-        id: 1,
+        id: result.id,
         ...request.body,
         redirectUrl: resultMidtrans.redirect_url,
       });
-      // return helperWrapper.response(response, 200, "Success create data !", {
-      //   ...result,
-      //   ...data,
-      // });
     } catch (error) {
       return helperWrapper.response(response, 400, "bad request", null);
     }
@@ -144,20 +146,31 @@ module.exports = {
   },
   postMidtransNotification: async (request, response) => {
     try {
-      console.log(request.body);
+      // console.log(request.body);
+      // {
+      //   "transaction_time": "2022-04-11 04:28:55",
+      //   "transaction_status": "settlement",
+      //   "transaction_id": "0eaadc94-26d2-4a8a-96b7-9d1e2ccee435",
+      //   "status_message": "midtrans payment notification",
+      //   "status_code": "200",
+      //   "signature_key": "ae6e92d353d9796c080be04017f11463021979adab8a4ccb91272fd75e291c80009e0927415133f1cb46d5822492691873a57dfaad4dc54ffed74bb7ae6c61fe",
+      //   "settlement_time": "2022-04-11 04:28:58",
+      //   "payment_type": "bca_klikpay",
+      //   "order_id": "8c5d510b-becc-4244-8457-c3b03fcaf68c",
+      //   "merchant_id": "G284301233",
+      //   "gross_amount": "100000.00",
+      //   "fraud_status": "accept",
+      //   "currency": "IDR",
+      //   "approval_code": "112233"
+      // }
       const result = await helperMidtrans.notif(request.body);
       const orderId = result.order_id;
       const transactionStatus = result.transaction_status;
       const fraudStatus = result.fraud_status;
-
+      const paymentType = result.payment_type;
       console.log(
-        `Transaction notification received. 
-        Order ID: ${orderId}. 
-        Transaction status: ${transactionStatus}. 
-        Fraud status: ${fraudStatus}`
+        `Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}`
       );
-
-      // Sample transactionStatus handling logic
 
       if (transactionStatus === "capture") {
         // capture only applies to card transaction, which you need to check for the fraudStatus
@@ -167,46 +180,118 @@ module.exports = {
           // PROSES MEMANGGIL MODEL untuk mengubah data di dalam database
           // id = orderId;
           const setData = {
-            paymentMethod: result.payment_type,
+            paymentMethod: paymentType,
             statusPayment: "PENDING",
-            // updatedAt: ...
+            updatedAt: new Date(Date.now()),
           };
-        } else if (fraudStatus === "accept") {
+          const resultUpdate = await bookingModel.updateStatusBooking(
+            orderId,
+            setData
+          );
+          return helperWrapper.response(
+            response,
+            200,
+            "succes get data !",
+            resultUpdate
+          );
+        }
+        if (fraudStatus === "accept") {
           // TODO set transaction status on your databaase to 'success'
           // UBAH STATUS PEMBAYARAN MENJADI SUCCESS
           // id = orderId;
           const setData = {
-            paymentMethod: result.payment_type,
+            paymentMethod: paymentType,
             statusPayment: "SUCCESS",
-            // updatedAt: ...
+            updatedAt: new Date(Date.now()),
           };
+          const resultUpdate = await bookingModel.updateStatusBooking(
+            orderId,
+            setData
+          );
+          return helperWrapper.response(
+            response,
+            200,
+            "succes get data !",
+            resultUpdate
+          );
         }
       } else if (transactionStatus === "settlement") {
         // TODO set transaction status on your databaase to 'success'
         // UBAH STATUS PEMBAYARAN MENJADI SUCCESS
         // id = orderId;
         const setData = {
-          paymentMethod: result.payment_type,
+          paymentMethod: paymentType,
           statusPayment: "SUCCESS",
-          // updatedAt: ...
+          updatedAt: new Date(Date.now()),
         };
-        console.log(
-          `Sukses melakukan pembayaran dengan id ${orderId} 
-          dan data yang diubah ${JSON.stringify(setData)}`
+        const resultUpdate = await bookingModel.updateStatusBooking(
+          orderId,
+          setData
+        );
+        return helperWrapper.response(
+          response,
+          200,
+          "succes get data !",
+          resultUpdate
         );
       } else if (transactionStatus === "deny") {
         // TODO you can ignore 'deny', because most of the time it allows payment retries
         // and later can become success
         // UBAH STATUS PEMBAYARAN MENJADI FAILED
+        const setData = {
+          paymentMethod: paymentType,
+          statusPayment: "FAILED",
+          updatedAt: new Date(Date.now()),
+        };
+        const resultUpdate = await bookingModel.updateStatusBooking(
+          orderId,
+          setData
+        );
+        return helperWrapper.response(
+          response,
+          200,
+          "succes get data !",
+          resultUpdate
+        );
       } else if (
         transactionStatus === "cancel" ||
         transactionStatus === "expire"
       ) {
         // TODO set transaction status on your databaase to 'failure'
         // UBAH STATUS PEMBAYARAN MENJADI FAILED
+        const setData = {
+          paymentMethod: paymentType,
+          statusPayment: "FAILED",
+          updatedAt: new Date(Date.now()),
+        };
+        const resultUpdate = await bookingModel.updateStatusBooking(
+          orderId,
+          setData
+        );
+        return helperWrapper.response(
+          response,
+          200,
+          "succes get data !",
+          resultUpdate
+        );
       } else if (transactionStatus === "pending") {
         // TODO set transaction status on your databaase to 'pending' / waiting payment
         // UBAH STATUS PEMBAYARAN MENJADI PENDING
+        const setData = {
+          paymentMethod: paymentType,
+          statusPayment: "PENDING",
+          updatedAt: new Date(Date.now()),
+        };
+        const resultUpdate = await bookingModel.updateStatusBooking(
+          orderId,
+          setData
+        );
+        return helperWrapper.response(
+          response,
+          200,
+          "succes get data !",
+          resultUpdate
+        );
       }
     } catch (error) {
       return helperWrapper.response(response, 400, "Bad Request", null);

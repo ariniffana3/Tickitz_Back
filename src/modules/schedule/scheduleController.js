@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require("uuid");
 const helperWrapper = require("../../helper/wrapper");
 const scheduleModel = require("./scheduleModel");
 const redis = require("../../config/redis");
@@ -79,6 +80,7 @@ module.exports = {
       const { movieId, premiere, price, location, dateStart, dateEnd, time } =
         request.body;
       const setData = {
+        id: uuidv4(),
         movieId,
         premiere,
         price,

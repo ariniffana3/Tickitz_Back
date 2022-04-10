@@ -3,10 +3,10 @@ const connection = require("../../config/mysql");
 module.exports = {
   createBooking: (data) =>
     new Promise((resolve, reject) => {
-      connection.query("INSERT INTO booking SET ?", data, (error, result) => {
+      connection.query("INSERT INTO booking SET ?", data, (error) => {
         if (!error) {
           const newResult = {
-            id: result.insertId,
+            ...data,
           };
           resolve(newResult);
         } else {

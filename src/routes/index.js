@@ -22,14 +22,15 @@ module.exports = Router;
 // ganti resultt dan result3-----sudah
 // error handling ditambahi------sudah
 // masukkan token ke email-------sudah
-// mengubah database yang id
-// uuid semua
-// update password ?? masalahnya di refresh tokennya diketahui user ga
-// midtrans belum dicoba
+// mengubah database yang id------sudah
+// uuid semua--------sudah
+// update password ?? masalahnya di refresh tokennya diketahui user ga------sudah
+// midtrans belum dicoba---------sudah
 // user belum ditambahkan auth-----sudah
-// tambahkan di postman notification untuk midtrans
+// tambahkan di postman notification untuk midtrans------sudah
 // update profile id nya ambil dari token ?
-// id midtrans
+// id midtrans--------sudah
+// publish postman-----sudah
 
 // ini sebagai admin
 // create movie----sudah diperbaiki blm di up
@@ -60,9 +61,11 @@ module.exports = Router;
 
 // https://git.heroku.com/pesanfilm.git
 // https://pesanfilm.herokuapp.com/
+// https://documenter.getpostman.com/view/20163681/UVyysCSm
 
 // untuk remote redis remote
-// redis-cli -h {host} -p {port} -a {password}
+// redis-cli -h redis-16160.c232.us-east-1-2.ec2.cloud.redislabs.com -p 16160 -a 4ug7kAKcXV0Irv4EYmyW6ePS9cX0xGYA
+// sampai kapan video itu buat kita
 
 // admin doremi@gmail.com 1233
 // user anaffiadiysor@gmail.com 123

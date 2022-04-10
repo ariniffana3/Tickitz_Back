@@ -106,7 +106,6 @@ module.exports = {
         null
       );
     } catch (error) {
-      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
