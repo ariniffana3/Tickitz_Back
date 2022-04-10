@@ -20,7 +20,6 @@ module.exports = {
       delete result[0].password;
       return helperWrapper.response(response, 200, "succes get data !", result);
     } catch (error) {
-      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },

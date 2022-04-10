@@ -34,8 +34,8 @@ module.exports = Router;
 // create movie----sudah diperbaiki blm di up
 // update movie kadang bisa kadang tidak, id not found terus ??????? percobaan kedua blm berhasil
 // create booking---------sudah diperbaiki blm di push
-// get booking by id booking ??????? percobaan kedua blm berhasil
-// get booking by userId ??????? percobaan kedua blm berhasil
+// get booking by id booking --------solved
+// get booking by userId ------------solved
 // register kadang bad request, kadang tidak bisa memfilter email
 // refresh token menampilkan html error dari heroku---------------------------solved
 // get user by userId juga tampil html heroku---------------------------------solved

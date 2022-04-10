@@ -25,7 +25,6 @@ module.exports = {
         ...data,
       });
     } catch (error) {
-      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
@@ -90,6 +89,7 @@ module.exports = {
           null
         );
       }
+
       const seat = data.map((item) => item.seat);
       // eslint-disable-next-line no-unused-expressions
       data.length > 1 ? (data = { ...data[0], seat }) : data;
