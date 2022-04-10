@@ -7,7 +7,6 @@ module.exports = {
       const { id } = request.params;
       let result = await redis.get(`getMovie:${id}`);
       if (result !== null) {
-        // console.log("data ada di dalam redis");
         result = JSON.parse(result);
         return helperWrapper.response(
           response,
@@ -16,7 +15,7 @@ module.exports = {
           result
         );
       }
-      //   console.log("data tidak ada di dalam redis");
+
       return next();
     } catch (error) {
       return helperWrapper.response(response, 400, error.message, null);

@@ -26,9 +26,9 @@ module.exports = {
     try {
       const { id } = request.params;
       const { firstName, lastName, noTelp } = request.body;
-      const resultt = await userModel.getUserByUserId(id);
+      const resultUserId = await userModel.getUserByUserId(id);
 
-      if (resultt.length <= 0) {
+      if (resultUserId.length <= 0) {
         return helperWrapper.response(
           response,
           404,
@@ -62,9 +62,9 @@ module.exports = {
   updateImage: async (request, response) => {
     try {
       const { id } = request.params;
-      const resultt = await userModel.getUserByUserId(id);
+      const resultUserId = await userModel.getUserByUserId(id);
 
-      if (resultt.length <= 0) {
+      if (resultUserId.length <= 0) {
         return helperWrapper.response(
           response,
           404,
@@ -82,7 +82,7 @@ module.exports = {
       }
 
       cloudinary.uploader.destroy(
-        `${resultt[0].image.split(".")[0]}`,
+        `${resultUserId[0].image.split(".")[0]}`,
         (error) => {
           if (error) {
             return helperWrapper.response(response, 404, error.message, null);
@@ -112,22 +112,33 @@ module.exports = {
     try {
       const { id } = request.params;
       let { newPassword, confirmPassword } = request.body;
-      const resultt = await userModel.getUserByUserId(id);
-      const result3 = await bcrypt.compare(newPassword, resultt[0].password);
+      const resultUserId = await userModel.getUserByUserId(id);
+      const resultPassword = await bcrypt.compare(
+        newPassword,
+        resultUserId[0].password
+      );
       let error = null;
       // eslint-disable-next-line no-unused-expressions
       !newPassword
         ? (error = `fill newPassword`)
         : newPassword !== confirmPassword
         ? (error = `newPassword and confirmPassword must match`)
-        : resultt.length <= 0
+        : resultUserId.length <= 0
         ? (error = `Data by Id${id} not found`)
-        : result3
+        : resultPassword
         ? (error = `password must be different`)
         : null;
 
       if (error) {
         return helperWrapper.response(response, 404, error, null);
+      }
+      if (resultUserId.length <= 0) {
+        return helperWrapper.response(
+          response,
+          404,
+          `Data by Id${id} not found`,
+          null
+        );
       }
       const saltRounds = 12;
       newPassword = await bcrypt.hash(newPassword, saltRounds);
@@ -144,7 +155,9 @@ module.exports = {
         result
       );
     } catch (error) {
-      return helperWrapper.response(response, 400, "bad request", null);
+      if (error) {
+        return helperWrapper.response(response, 400, "bad request", null);
+      }
     }
   },
 };

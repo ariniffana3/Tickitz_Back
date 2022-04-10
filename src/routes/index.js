@@ -18,7 +18,11 @@ module.exports = Router;
 
 /// https://tickitzz.herokuapp.com
 // https://github.com/microsoftarchive/redis/releases
-// auth auth jwt redis multer
-// uplouad file, bisa post, limit, file validation 500 kb 1 mb jpg png
-// auth auth registrasi pake skema database, bycrpt, login, role user
-// redis, postmannya di clear, opt refresh token, aktivasi, readme,
+
+// ganti resultt dan result3
+// error handling ditambahi
+// masukkan token ke email
+
+// apakah refeshToken kerjanya tanpa diketahui user,
+// jika ya maka kita tak perlu menaruh refreshToken
+// dalam logout, tapi apakah user bisa tahu refreshToken

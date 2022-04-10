@@ -146,9 +146,9 @@ module.exports = {
         duration,
         synopsis,
       } = request.body;
-      const resultt = await movieModel.getMovieById(id);
+      const resultMovieId = await movieModel.getMovieById(id);
 
-      if (resultt.length <= 0) {
+      if (resultMovieId.length <= 0) {
         return helperWrapper.response(
           response,
           404,
@@ -157,7 +157,7 @@ module.exports = {
         );
       }
 
-      let newData = {
+      const newData = {
         name,
         category,
         releaseDate,
@@ -165,23 +165,26 @@ module.exports = {
         director,
         duration,
         synopsis,
+        image: request.file
+          ? `${request.file.filename}.${request.file.mimetype.split("/")[1]}`
+          : "",
         updatedAt: new Date(Date.now()),
       };
       if (request.file) {
         cloudinary.uploader.destroy(
-          `${resultt[0].image.split(".")[0]}`,
+          `${resultMovieId[0].image.split(".")[0]}`,
           (error) => {
             if (error) {
               return helperWrapper.response(response, 404, error.message, null);
             }
           }
         );
-        newData = {
-          ...newData,
-          image: `${request.file.filename}.${
-            request.file.mimetype.split("/")[1]
-          }`,
-        };
+        // newData = {
+        //   ...newData,
+        //   image: `${request.file.filename}.${
+        //     request.file.mimetype.split("/")[1]
+        //   }`,
+        // };
       }
       // eslint-disable-next-line no-restricted-syntax
       for (const data in newData) {
@@ -203,9 +206,9 @@ module.exports = {
   deleteMovie: async (request, response) => {
     try {
       const { id } = request.params;
-      const resultt = await movieModel.getMovieById(id);
+      const resultMovieId = await movieModel.getMovieById(id);
 
-      if (resultt.length <= 0) {
+      if (resultMovieId.length <= 0) {
         return helperWrapper.response(
           response,
           404,
@@ -214,7 +217,7 @@ module.exports = {
         );
       }
       cloudinary.uploader.destroy(
-        `${resultt[0].image.split(".")[0]}`,
+        `${resultMovieId[0].image.split(".")[0]}`,
         (error) => {
           if (error) {
             return helperWrapper.response(response, 404, error.message, null);
@@ -229,7 +232,6 @@ module.exports = {
         result
       );
     } catch (error) {
-      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },

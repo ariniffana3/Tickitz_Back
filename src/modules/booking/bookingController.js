@@ -29,9 +29,9 @@ module.exports = {
     try {
       const { id } = request.params;
       const { statusUsed } = request.body;
-      const resultt = await bookingModel.getBookingById(id);
+      const resultBookingId = await bookingModel.getBookingById(id);
 
-      if (resultt.length <= 0) {
+      if (resultBookingId.length <= 0) {
         return helperWrapper.response(
           response,
           404,

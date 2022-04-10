@@ -103,9 +103,9 @@ module.exports = {
       const { id } = request.params;
       const { movieId, premiere, price, location, dateStart, dateEnd, time } =
         request.body;
-      const resultt = await scheduleModel.getScheduleById(id);
+      const resultScheduleId = await scheduleModel.getScheduleById(id);
 
-      if (resultt.length <= 0) {
+      if (resultScheduleId.length <= 0) {
         return helperWrapper.response(
           response,
           404,
@@ -143,9 +143,9 @@ module.exports = {
   deleteSchedule: async (request, response) => {
     try {
       const { id } = request.params;
-      const resultt = await scheduleModel.getScheduleById(id);
+      const resultScheduleId = await scheduleModel.getScheduleById(id);
 
-      if (resultt.length <= 0) {
+      if (resultScheduleId.length <= 0) {
         return helperWrapper.response(
           response,
           404,
