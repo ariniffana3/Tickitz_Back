@@ -70,8 +70,7 @@ module.exports = {
   },
   getBookingByUserId: async (request, response) => {
     try {
-      let { id } = request.params;
-      id *= 1;
+      const { id } = request.params;
       const result = await bookingModel.getBookingByUserId(id);
 
       if (result.length <= 0) {
@@ -85,14 +84,12 @@ module.exports = {
 
       return helperWrapper.response(response, 200, "succes get data !", result);
     } catch (error) {
-      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
   getBookingByIdBooking: async (request, response) => {
     try {
-      let { id } = request.params;
-      id *= 1;
+      const { id } = request.params;
       let data = await bookingModel.getBookingByIdBooking(id);
 
       if (data.length <= 0) {
@@ -109,7 +106,6 @@ module.exports = {
       data.length > 1 ? (data = { ...data[0], seat }) : data;
       return helperWrapper.response(response, 200, "succes get data !", data);
     } catch (error) {
-      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
