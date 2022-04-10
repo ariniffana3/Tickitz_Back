@@ -21,7 +21,7 @@ module.exports = {
           null
         );
       }
-      if (checkEmail[0].length <= 0) {
+      if (checkEmail.length <= 0) {
         const saltRounds = 12;
         password = await bcrypt.hash(password, saltRounds);
         const setData = {
@@ -44,7 +44,23 @@ module.exports = {
         bottonUrl: token,
       };
 
-      await sendMail(setSendEmail);
+      await sendMail(setSendEmail)
+        .then((info) => {
+          // console.log(info);
+          // {
+          //   accepted: [ 'budii@gmail.com' ],
+          //   rejected: [],
+          //   envelopeTime: 918,
+          //   messageTime: 648,
+          //   messageSize: 938,
+          //   response: '250 2.0.0 OK  1649593869 d6-20020a056a00244600b004f701135460sm33461743pfj.146 - gsmtp',
+          //   envelope: { from: 'anaffiadiysor@gmail.com', to: [ 'budii@gmail.com' ] },
+          //   messageId: '<fb204455-ae11-3156-2424-15847275a249@gmail.com>'
+          // }
+        })
+        .catch((error) =>
+          helperWrapper.response(response, 403, error.message, null)
+        );
       // console.log(resultSendMail);
 
       // jika menggunakan nodemailer
@@ -90,6 +106,7 @@ module.exports = {
         null
       );
     } catch (error) {
+      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
@@ -173,7 +190,7 @@ module.exports = {
   },
   refresh: async (request, response) => {
     try {
-      const refreshToken = request.params;
+      const { refreshToken } = request.body;
       const checkToken = await redis.get(`refreshToken:${refreshToken}`);
       if (checkToken) {
         return helperWrapper.response(
@@ -183,7 +200,7 @@ module.exports = {
           null
         );
       }
-      jwt.verify({ refreshToken }, "RAHASIABARU", async (error, result) => {
+      jwt.verify(refreshToken, "RAHASIABARU", async (error, result) => {
         if (error) {
           return helperWrapper.response(response, 400, error.message, null);
         }

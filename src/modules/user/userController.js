@@ -8,7 +8,7 @@ module.exports = {
     try {
       const { id } = request.params;
       const result = await userModel.getUserByUserId(id);
-      delete result[0].password;
+
       if (result.length <= 0) {
         return helperWrapper.response(
           response,
@@ -17,8 +17,10 @@ module.exports = {
           null
         );
       }
+      delete result[0].password;
       return helperWrapper.response(response, 200, "succes get data !", result);
     } catch (error) {
+      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
