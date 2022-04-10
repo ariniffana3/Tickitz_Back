@@ -13,7 +13,7 @@ module.exports = {
       // eslint-disable-next-line prefer-const
       let { firstName, lastName, noTelp, email, password } = request.body;
       const checkEmail = await authModel.getUserByEmail(email);
-      if (checkEmail.length >= 1 && checkEmail.status === "active") {
+      if (checkEmail.length >= 1 && checkEmail[0].status === "active") {
         return helperWrapper.response(
           response,
           404,
@@ -21,7 +21,7 @@ module.exports = {
           null
         );
       }
-      if (checkEmail.length <= 0) {
+      if (checkEmail[0].length <= 0) {
         const saltRounds = 12;
         password = await bcrypt.hash(password, saltRounds);
         const setData = {
@@ -44,7 +44,7 @@ module.exports = {
         bottonUrl: token,
       };
 
-      const resultSendMail = await sendMail(setSendEmail);
+      await sendMail(setSendEmail);
       // console.log(resultSendMail);
 
       // jika menggunakan nodemailer
@@ -75,7 +75,14 @@ module.exports = {
       //     );
       //   }
       // });
-
+      if (checkEmail.length >= 1 && checkEmail[0].status === "notActive") {
+        return helperWrapper.response(
+          response,
+          404,
+          "You has been register before, pleaase activate, check your email",
+          null
+        );
+      }
       return helperWrapper.response(
         response,
         200,
@@ -166,7 +173,7 @@ module.exports = {
   },
   refresh: async (request, response) => {
     try {
-      const { refreshToken } = request.body;
+      const refreshToken = request.params;
       const checkToken = await redis.get(`refreshToken:${refreshToken}`);
       if (checkToken) {
         return helperWrapper.response(
@@ -176,10 +183,15 @@ module.exports = {
           null
         );
       }
-      jwt.verify(refreshToken, "RAHASIABARU", async (error, result) => {
+      jwt.verify({ refreshToken }, "RAHASIABARU", async (error, result) => {
+        if (error) {
+          return helperWrapper.response(response, 400, error.message, null);
+        }
+        // eslint-disable-next-line no-param-reassign
         delete result.iat;
+        // eslint-disable-next-line no-param-reassign
         delete result.exp;
-        const token = jwt.sign(result, "RAHASIA", { expiresIn: "1h" });
+        const token = jwt.sign({ result }, "RAHASIA", { expiresIn: "24h" });
         const newRefreshToken = jwt.sign(result, "RAHASIABARU", {
           expiresIn: "24h",
         });

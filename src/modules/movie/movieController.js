@@ -120,7 +120,7 @@ module.exports = {
         duration,
         synopsis,
         image: request.file
-          ? `${request.file.filename}.${request.mimetype.split("/")[1]}`
+          ? `${request.file.filename}.${request.file.mimetype.split("/")[1]}`
           : "",
       };
       const result = await movieModel.createMovie(setData);
@@ -131,6 +131,7 @@ module.exports = {
         result
       );
     } catch (error) {
+      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
