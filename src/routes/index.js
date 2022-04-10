@@ -32,10 +32,10 @@ module.exports = Router;
 
 // ini sebagai admin
 // create movie----sudah diperbaiki blm di up
-// update movie kadang bisa kadang tidak, id not found terus
+// update movie kadang bisa kadang tidak, id not found terus ??????? percobaan kedua blm berhasil
 // create booking---------sudah diperbaiki blm di push
-// get booking by id booking
-// get booking by userId
+// get booking by id booking ??????? percobaan kedua blm berhasil
+// get booking by userId ??????? percobaan kedua blm berhasil
 // register kadang bad request, kadang tidak bisa memfilter email
 // refresh token menampilkan html error dari heroku---------------------------solved
 // get user by userId juga tampil html heroku---------------------------------solved
@@ -55,7 +55,7 @@ module.exports = Router;
 // get booking by userId bisa
 // register ---------------------------------------------------------------------solved
 
-// console redis kalau pakai redis remote dimana??
+// create booking ditambah total ticket
 
 // https://git.heroku.com/pesanfilm.git
 // https://pesanfilm.herokuapp.com/

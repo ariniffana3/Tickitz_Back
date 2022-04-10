@@ -8,6 +8,7 @@ module.exports = {
       const data = request.body;
       const dataCreate = {
         ...data,
+        totalTicket: data.seat.length,
         statusPayment: "success",
       };
       delete dataCreate.seat;
