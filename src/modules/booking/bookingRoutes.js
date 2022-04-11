@@ -37,7 +37,6 @@ Router.get(
 );
 Router.post(
   "/midtrans-notification",
-  middlewareAuth.authentication,
   bookingController.postMidtransNotification
 );
 
