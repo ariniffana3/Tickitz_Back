@@ -51,7 +51,7 @@ module.exports = {
         3600,
         JSON.stringify({ result, pageInfo })
       );
-      if (result.length <= 0) {
+      if (totalData <= 0) {
         return helperWrapper.response(
           response,
           404,

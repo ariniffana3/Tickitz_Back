@@ -4,8 +4,7 @@ module.exports = {
   getCountMovie: (searchName) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(*) AS total FROM movie WHERE name=?`,
-        searchName,
+        `SELECT COUNT(*) AS total FROM movie WHERE name like '%${searchName}%'`,
         (error, result) => {
           if (!error) {
             resolve(result[0].total);
@@ -32,8 +31,8 @@ module.exports = {
   getCountMovieAndRelease: (searchName, searchRelease) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(*) AS total FROM movie JOIN schedule ON 
-        movie.id = schedule.movieId WHERE movie.name like '%${searchName}%' AND MONTH(schedule.dateStart) = ?`,
+        `SELECT COUNT(*) AS total FROM movie 
+         WHERE movie.name like '%${searchName}%' AND MONTH(movie.releasedate) = ?`,
         searchRelease,
         (error, result) => {
           if (!error) {
@@ -47,8 +46,8 @@ module.exports = {
   getAllMovieAndRelease: (limit, offset, sort, searchName, searchRelease) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM movie JOIN schedule ON 
-        movie.id = schedule.movieId WHERE name like '%${searchName}%' AND  MONTH(schedule.dateStart)= ? ORDER BY ${sort} LIMIT ? OFFSET ?`,
+        `SELECT * FROM movie
+        WHERE name like '%${searchName}%' AND  MONTH(releasedate)= ? ORDER BY ${sort} LIMIT ? OFFSET ?`,
         [searchRelease, limit, offset],
         (error, result) => {
           if (!error) {
