@@ -5,8 +5,8 @@ const snap = new midtransClient.Snap({
   // serverKey: "SB-Mid-server-Ot4pjPNWWS88HlEfnLSWnLUa",
   // clientKey: "SB-Mid-client-eLduNOJQaF-hs6ht",
   isProduction: process.env.MIDTRANS_PRODUCTION === "true",
-  serverKey: process.env.MIDTRANS_SERVER_KEY,
-  clientKey: process.env.MIDTRANS_CLIENT_KEY,
+  serverKey: `${process.env.MIDTRANS_SERVER_KEY}`,
+  clientKey: `${process.env.MIDTRANS_CLIENT_KEY}`,
 });
 
 module.exports = {
