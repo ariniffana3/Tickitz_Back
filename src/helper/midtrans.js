@@ -44,6 +44,7 @@ module.exports = {
           resolve(statusResponse);
         })
         .catch((error) => {
+          console.log(error);
           reject(error);
         });
     }),
