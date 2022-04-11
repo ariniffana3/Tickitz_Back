@@ -18,7 +18,7 @@
 1. Clone this repository
 2. open in your code editor
 3. Type `npm install`
-4. Make new file a called **.env**, set up first [here](#.env.example)
+4. Make new file a called **.env**, set up .env use the file .env.example
 5. Turn on Web Server and MySQL can using Third-party tool like xampp, etc.
 6. Create a database with the name #nama_database, and Import file sql to **phpmyadmin**
 7. Install Redis first and run Redis
