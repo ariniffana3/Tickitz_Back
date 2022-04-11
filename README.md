@@ -1,5 +1,4 @@
 <h1 align="center">ExpressJS - Pesanfilm RESTfull API</h1>
- [More about Express](https://en.wikipedia.org/wiki/Express.js)
 
 ## Built With
 
@@ -19,17 +18,13 @@
 1. Clone this repository
 2. open in your code editor
 3. Type `npm install`
-4. Make new file a called **.env**, set up first [here](#set-up-env-file)
+4. Make new file a called **.env**, set up first [here](#.env.example)
 5. Turn on Web Server and MySQL can using Third-party tool like xampp, etc.
 6. Create a database with the name #nama_database, and Import file sql to **phpmyadmin**
 7. Install Redis first and run Redis
 8. Open Postman desktop application or Chrome web app extension that has installed before
 9. Choose HTTP Method and enter request url.(ex. localhost:3001/)
-10. You can see all the end point [here](https://documenter.getpostman.com/view/9852901/TzJoEfvL)
-
-## Using app via postman
-
-This is request you can do with this app <a href="https://nodejs.org/en/download/">Postman</a>
+10. You can see all the end point [here](https://documenter.getpostman.com/view/20163681/UVyysCSm)
 
 ## License
 
