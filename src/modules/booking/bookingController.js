@@ -93,7 +93,7 @@ module.exports = {
   getBookingByIdBooking: async (request, response) => {
     try {
       const { id } = request.params;
-      const data = await bookingModel.getBookingByIdBooking(id);
+      let data = await bookingModel.getBookingByIdBooking(id);
 
       if (data.length <= 0) {
         return helperWrapper.response(
@@ -104,9 +104,9 @@ module.exports = {
         );
       }
 
-      // const seat = data.map((item) => item.seat);
+      const seat = data.map((item) => item.seat);
       // eslint-disable-next-line no-unused-expressions
-      // data.length > 1 ? (data = { ...data[0], seat }) : data;
+      data.length > 1 ? (data = { ...data[0], seat }) : data;
       return helperWrapper.response(response, 200, "succes get data !", data);
     } catch (error) {
       console.log(error);
