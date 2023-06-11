@@ -15,9 +15,9 @@
     MYSQL_PASSWORD_LOCAL= ""
     MYSQL_DATABASE_LOCAL= "tickitz"
 
-    REDIS_HOST= "redis-16160.c232.us-east-1-2.ec2.cloud.redislabs.com"
-    REDIS_PORT= "16160"
-    REDIS_PASSWORD = "4ug7kAKcXV0Irv4EYmyW6ePS9cX0xGYA"
+    REDIS_HOST= "redis-16885.c278.us-east-1-4.ec2.cloud.redislabs.com"
+    REDIS_PORT= "16885"
+    REDIS_PASSWORD = "P0lyZYNRHuss5ml7OhmiRHLbziqvyeVM"
 
 
     MAIL_CLIENT_ID= "771154540962-0kgimm1ip8mhkduoq06dnnda62sbdsqn.apps.googleusercontent.com"
