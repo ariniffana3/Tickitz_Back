@@ -1,0 +1,38 @@
+[build]
+  command = "npm run build"  
+  functions = "functions"  
+
+[build.environment]
+    PORT= 3001
+
+    MYSQL_HOST_ONLINE=ec2-44-202-197-206.compute-1.amazonaws.com
+    MYSQL_USER_ONLINE= fw6arin
+    MYSQL_PASSWORD_ONLINE=Idgjo50!
+    MYSQL_DATABASE_ONLINE= fw6arin_pesanfilm
+
+    MYSQL_HOST_LOCAL= localhost
+    MYSL_USER_LOCAL= root
+    MYSQL_PASSWORD_LOCAL= 
+    MYSQL_DATABASE_LOCAL= tickitz
+
+    REDIS_HOST= redis-16160.c232.us-east-1-2.ec2.cloud.redislabs.com
+    REDIS_PORT= 16160
+    REDIS_PASSWORD = 4ug7kAKcXV0Irv4EYmyW6ePS9cX0xGYA
+
+
+    MAIL_CLIENT_ID= 771154540962-0kgimm1ip8mhkduoq06dnnda62sbdsqn.apps.googleusercontent.com
+    MAIL_CLIENT_SECRET= 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
+    MAIL_REFRESH_TOKEN= 1//04LFtLQjYpZYGCgYIARAAGAQSNwF-L9IremWoRNsJMKJgBhElM-TNBdf4lXKeF25cowiVe2ANgxyHq4p4pPNYs75F7EFDBSkxbDQ
+
+    CLOUDINARY_CLOUDNAME= dabzupph0
+    CLOUDINARY_APIKEY= 836113171438188
+    CLOUDINARY_APISECRET= E8moUWTv6Ga6SYqpYZ4WHcsH9hk
+
+    MIDTRANS_PRODUCTION= false
+    MIDTRANS_SERVER_KEY=SB-Mid-server-kq_7iv-Xw-WbzMPEfdYwMAAJ
+    MIDTRANS_CLIENT_KEY=SB-Mid-client-V3rtR5e3CaYWKNON 
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
