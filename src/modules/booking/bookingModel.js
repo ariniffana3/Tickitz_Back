@@ -55,10 +55,11 @@ module.exports = {
         bk.createdAt,
         bk.updatedAt,
         mv.name,
-        mv.category
+        mv.category,
+        sc.premiere
         FROM booking AS bk JOIN bookingseat AS bks ON bk.id COLLATE utf8mb4_unicode_ci =bks.bookingId
         JOIN schedule AS sc ON bk.scheduleId = sc.id 
-        JOIN movie AS mv ON sc.movieId = mv.Id WHERE bk.userId =?  `,
+        JOIN movie AS mv ON sc.movieId = mv.Id WHERE bk.userId =? ORDER BY createdAt DESC `,
         id,
         (error, result) => {
           if (!error) {
