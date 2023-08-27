@@ -101,12 +101,14 @@ module.exports = {
         bk.totalPayment, 
         bk.paymentMethod, 
         bk.statusPayment, 
-        bk.statusUsed, 
+        bk.statusUsed,
+        bk.qrCode, 
         bks.seat, 
         bk.createdAt, 
         bk.updatedAt, 
         mv.name, 
-        mv.category 
+        mv.category,
+        sc.premiere,
         FROM booking AS bk
         JOIN bookingseat AS bks ON bk.id COLLATE utf8mb4_unicode_ci = bks.bookingId 
         JOIN schedule AS sc ON bk.scheduleId COLLATE utf8mb4_unicode_ci = sc.id 
