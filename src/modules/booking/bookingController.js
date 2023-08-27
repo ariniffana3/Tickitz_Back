@@ -3,7 +3,7 @@ const helperWrapper = require("../../helper/wrapper");
 const bookingModel = require("./bookingModel");
 const helperMidtrans = require("../../helper/midtrans");
 const qr = require("qrcode");
-const cloudinary = require("cloudinary");
+const cloudinary = require("cloudinary").v2;
 
 module.exports = {
   createBooking: async (request, response) => {

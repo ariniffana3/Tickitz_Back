@@ -51,6 +51,7 @@ module.exports = {
         bk.paymentMethod,
         bk.statusPayment,
         bk.statusUsed,
+        bk.qrCode,
         bks.seat,
         bk.createdAt,
         bk.updatedAt,
