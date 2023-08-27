@@ -2,6 +2,8 @@ const { v4: uuidv4 } = require("uuid");
 const helperWrapper = require("../../helper/wrapper");
 const bookingModel = require("./bookingModel");
 const helperMidtrans = require("../../helper/midtrans");
+const qr = require("qrcode");
+const cloudinary = require("cloudinary");
 
 module.exports = {
   createBooking: async (request, response) => {
@@ -198,9 +200,23 @@ module.exports = {
           );
         }
         if (fraudStatus === "accept") {
+          qr.toFile("public/qr.jpg", orderId, function (err) {
+            if (err) console.log(err);
+          });
+          const options = {
+            folder: "pesanfilm/imageQr",
+          };
+          var qrCode = "";
+          await cloudinary.uploader
+            .upload("public/qr.jpg", options)
+            .then((result) => {
+              qrCode = result.url;
+            });
+
           const setData = {
             paymentMethod: paymentType,
             statusPayment: "SUCCESS",
+            qrCode,
             updatedAt: new Date(Date.now()),
           };
           const resultUpdate = await bookingModel.updateStatusBooking(
@@ -215,9 +231,23 @@ module.exports = {
           );
         }
       } else if (transactionStatus === "settlement") {
+        qr.toFile("public/qr.jpg", orderId, function (err) {
+          if (err) console.log(err);
+        });
+        const options = {
+          folder: "pesanfilm/imageQr",
+        };
+        var qrCode = "";
+        await cloudinary.uploader
+          .upload("public/qr.jpg", options)
+          .then((result) => {
+            qrCode = result.url;
+          });
+
         const setData = {
           paymentMethod: paymentType,
           statusPayment: "SUCCESS",
+          qrCode,
           updatedAt: new Date(Date.now()),
         };
         const resultUpdate = await bookingModel.updateStatusBooking(

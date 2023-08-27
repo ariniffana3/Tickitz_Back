@@ -3,24 +3,13 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require("../config/cloudinary");
 const helperWrapper = require("../helper/wrapper");
 
-// jika menyimpan data di cloudinary
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "pesanfilm/imageProfile",
   },
 });
-// tambahkan untuk mengecek limit dan ekstensi gambar
 
-// jika menyimpan daat di dalam project
-// const storage = multer.diskStorage({
-//   destination(req, file, cb) {
-//     cb(null, "public/uploads/movie");
-//   },
-//   filename(req, file, cb) {
-//     cb(null, new Date().toString().replace(/:/g, "-") + file.originalname);
-//   },
-// });
 const maxSize = 1048576;
 const upload = multer({
   storage,
