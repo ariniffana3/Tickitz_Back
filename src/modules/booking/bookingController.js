@@ -17,7 +17,7 @@ module.exports = {
       };
       var qrCode = "";
       await cloudinary.uploader
-        .upload("public/qr.jpg", options)
+        .upload("./public/qr.jpg", options)
         .then((result) => {
           qrCode = result.url;
         });
