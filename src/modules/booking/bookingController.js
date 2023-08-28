@@ -232,8 +232,8 @@ module.exports = {
                 if (error) {
                   console.log("Error uploading to Cloudinary:", error);
                 } else {
-                  console.log("success", result);
                   qrCode = result.url;
+                  console.log("success", result);
                 }
               }
             );
@@ -272,8 +272,8 @@ module.exports = {
               if (error) {
                 console.log("Error uploading to Cloudinary:", error);
               } else {
-                console.log("success", result);
                 qrCode = result.url;
+                console.log("success", result);
               }
             }
           );
