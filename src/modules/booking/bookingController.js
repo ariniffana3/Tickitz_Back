@@ -201,13 +201,14 @@ module.exports = {
           );
         }
         if (fraudStatus === "accept") {
+          console.log("fraud status accept");
           const options = {
             folder: "pesanfilm/imageQr",
           };
           var qrCode = "";
           qr.toDataURL(orderId, (err, qrDataURL) => {
             if (err) throw err;
-
+            console.log("disini");
             cloudinary.uploader.upload(qrDataURL, options, (error, result) => {
               if (error) {
                 console.log("Error uploading to Cloudinary:", error);
@@ -236,13 +237,14 @@ module.exports = {
           );
         }
       } else if (transactionStatus === "settlement") {
+        console.log("transaction status settlement");
         const options = {
           folder: "pesanfilm/imageQr",
         };
         var qrCode = "";
         qr.toDataURL(orderId, (err, qrDataURL) => {
           if (err) throw err;
-
+          console.log("disini 2");
           cloudinary.uploader.upload(qrDataURL, options, (error, result) => {
             if (error) {
               console.log("Error uploading to Cloudinary:", error);
