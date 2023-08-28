@@ -237,24 +237,23 @@ module.exports = {
                 }
               }
             );
+            const setData = {
+              paymentMethod: paymentType,
+              statusPayment: "SUCCESS",
+              qrCode,
+              updatedAt: new Date(Date.now()),
+            };
+            const resultUpdate = await bookingModel.updateStatusBooking(
+              orderId,
+              setData
+            );
+            return helperWrapper.response(
+              response,
+              200,
+              "succes get data !",
+              resultUpdate
+            );
           });
-
-          const setData = {
-            paymentMethod: paymentType,
-            statusPayment: "SUCCESS",
-            qrCode,
-            updatedAt: new Date(Date.now()),
-          };
-          const resultUpdate = await bookingModel.updateStatusBooking(
-            orderId,
-            setData
-          );
-          return helperWrapper.response(
-            response,
-            200,
-            "succes get data !",
-            resultUpdate
-          );
         }
       } else if (transactionStatus === "settlement") {
         console.log("transaction status settlement");
@@ -277,23 +276,23 @@ module.exports = {
               }
             }
           );
+          const setData = {
+            paymentMethod: paymentType,
+            statusPayment: "SUCCESS",
+            qrCode,
+            updatedAt: new Date(Date.now()),
+          };
+          const resultUpdate = await bookingModel.updateStatusBooking(
+            orderId,
+            setData
+          );
+          return helperWrapper.response(
+            response,
+            200,
+            "succes get data !",
+            resultUpdate
+          );
         });
-        const setData = {
-          paymentMethod: paymentType,
-          statusPayment: "SUCCESS",
-          qrCode,
-          updatedAt: new Date(Date.now()),
-        };
-        const resultUpdate = await bookingModel.updateStatusBooking(
-          orderId,
-          setData
-        );
-        return helperWrapper.response(
-          response,
-          200,
-          "succes get data !",
-          resultUpdate
-        );
       } else if (transactionStatus === "deny") {
         const setData = {
           paymentMethod: paymentType,
