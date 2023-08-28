@@ -201,19 +201,25 @@ module.exports = {
           );
         }
         if (fraudStatus === "accept") {
-          const qrImagePath = path.join(__dirname, "qrcode.png");
-          qr.toFile(qrImagePath, orderId, function (err) {
-            if (err) console.log(err);
-          });
           const options = {
             folder: "pesanfilm/imageQr",
           };
           var qrCode = "";
-          await cloudinary.uploader
-            .upload(qrImagePath, options)
-            .then((result) => {
-              qrCode = result.url;
-            });
+          qr.toDataURL(qrData, async (err, qrDataURL) => {
+            if (err) throw err;
+
+            await cloudinary.uploader.upload(
+              qrDataURL,
+              options,
+              (error, result) => {
+                if (error) {
+                  console.error("Error uploading to Cloudinary:", error);
+                } else {
+                  qrCode = result.url;
+                }
+              }
+            );
+          });
 
           const setData = {
             paymentMethod: paymentType,
@@ -233,20 +239,25 @@ module.exports = {
           );
         }
       } else if (transactionStatus === "settlement") {
-        const qrImagePath = path.join(__dirname, "qrcode.png");
-        qr.toFile(qrImagePath, orderId, function (err) {
-          if (err) console.log(err);
-        });
         const options = {
           folder: "pesanfilm/imageQr",
         };
         var qrCode = "";
-        await cloudinary.uploader
-          .upload(qrImagePath, options)
-          .then((result) => {
-            qrCode = result.url;
-          });
+        qr.toDataURL(qrData, async (err, qrDataURL) => {
+          if (err) throw err;
 
+          await cloudinary.uploader.upload(
+            qrDataURL,
+            options,
+            (error, result) => {
+              if (error) {
+                console.error("Error uploading to Cloudinary:", error);
+              } else {
+                qrCode = result.url;
+              }
+            }
+          );
+        });
         const setData = {
           paymentMethod: paymentType,
           statusPayment: "SUCCESS",
