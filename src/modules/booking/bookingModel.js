@@ -108,7 +108,7 @@ module.exports = {
         bk.updatedAt, 
         mv.name, 
         mv.category,
-        sc.premiere,
+        sc.premiere
         FROM booking AS bk
         JOIN bookingseat AS bks ON bk.id COLLATE utf8mb4_unicode_ci = bks.bookingId 
         JOIN schedule AS sc ON bk.scheduleId COLLATE utf8mb4_unicode_ci = sc.id 
