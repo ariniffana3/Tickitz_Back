@@ -215,6 +215,7 @@ module.exports = {
                 if (error) {
                   console.error("Error uploading to Cloudinary:", error);
                 } else {
+                  console.log("success", result);
                   qrCode = result.url;
                 }
               }
@@ -243,7 +244,7 @@ module.exports = {
           folder: "pesanfilm/imageQr",
         };
         var qrCode = "";
-        qr.toDataURL(orderId, async (err, qrDataURL) => {
+        await qr.toDataURL(orderId, async (err, qrDataURL) => {
           if (err) throw err;
 
           await cloudinary.uploader.upload(
@@ -253,6 +254,7 @@ module.exports = {
               if (error) {
                 console.error("Error uploading to Cloudinary:", error);
               } else {
+                console.log("success", result);
                 qrCode = result.url;
               }
             }
