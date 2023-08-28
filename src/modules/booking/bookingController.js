@@ -217,53 +217,30 @@ module.exports = {
           );
         }
         if (fraudStatus === "accept") {
-          console.log("fraud status accept");
-          const options = {
-            folder: "pesanfilm/imageQr",
+          const setData = {
+            paymentMethod: paymentType,
+            statusPayment: "SUCCESS",
+            qrCode,
+            updatedAt: new Date(Date.now()),
           };
-          var qrCode = "";
-          qr.toDataURL(orderId, async (err, qrDataURL) => {
-            if (err) throw err;
-            console.log("disini");
-            await cloudinary.uploader.upload(
-              qrDataURL,
-              options,
-              (error, result) => {
-                if (error) {
-                  console.log("Error uploading to Cloudinary:", error);
-                } else {
-                  qrCode = result.url;
-                  console.log("success", result);
-                }
-              }
-            );
-            const setData = {
-              paymentMethod: paymentType,
-              statusPayment: "SUCCESS",
-              qrCode,
-              updatedAt: new Date(Date.now()),
-            };
-            const resultUpdate = await bookingModel.updateStatusBooking(
-              orderId,
-              setData
-            );
-            return helperWrapper.response(
-              response,
-              200,
-              "succes get data !",
-              resultUpdate
-            );
-          });
+          const resultUpdate = await bookingModel.updateStatusBooking(
+            orderId,
+            setData
+          );
+          return helperWrapper.response(
+            response,
+            200,
+            "succes get data !",
+            resultUpdate
+          );
         }
       } else if (transactionStatus === "settlement") {
-        console.log("transaction status settlement");
         const options = {
           folder: "pesanfilm/imageQr",
         };
         var qrCode = "";
         qr.toDataURL(orderId, async (err, qrDataURL) => {
           if (err) throw err;
-          console.log("disini 2");
           await cloudinary.uploader.upload(
             qrDataURL,
             options,
@@ -272,7 +249,6 @@ module.exports = {
                 console.log("Error uploading to Cloudinary:", error);
               } else {
                 qrCode = result.url;
-                console.log("success", result);
               }
             }
           );
