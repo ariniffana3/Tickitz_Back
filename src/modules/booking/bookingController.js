@@ -210,7 +210,7 @@ module.exports = {
 
             cloudinary.uploader.upload(qrDataURL, options, (error, result) => {
               if (error) {
-                console.error("Error uploading to Cloudinary:", error);
+                console.log("Error uploading to Cloudinary:", error);
               } else {
                 console.log("success", result);
                 qrCode = result.url;
@@ -245,7 +245,7 @@ module.exports = {
 
           cloudinary.uploader.upload(qrDataURL, options, (error, result) => {
             if (error) {
-              console.error("Error uploading to Cloudinary:", error);
+              console.log("Error uploading to Cloudinary:", error);
             } else {
               console.log("success", result);
               qrCode = result.url;
