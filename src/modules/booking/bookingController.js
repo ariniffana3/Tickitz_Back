@@ -220,7 +220,6 @@ module.exports = {
           const setData = {
             paymentMethod: paymentType,
             statusPayment: "SUCCESS",
-            qrCode,
             updatedAt: new Date(Date.now()),
           };
           const resultUpdate = await bookingModel.updateStatusBooking(
