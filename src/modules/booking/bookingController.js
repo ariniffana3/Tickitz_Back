@@ -4,6 +4,7 @@ const bookingModel = require("./bookingModel");
 const helperMidtrans = require("../../helper/midtrans");
 const qr = require("qrcode");
 const cloudinary = require("cloudinary").v2;
+const path = require("path");
 
 module.exports = {
   createBooking: async (request, response) => {
@@ -200,7 +201,8 @@ module.exports = {
           );
         }
         if (fraudStatus === "accept") {
-          qr.toFile("public/qr.jpg", orderId, function (err) {
+          const qrImagePath = path.join(__dirname, "qrcode.png");
+          qr.toFile(qrImagePath, orderId, function (err) {
             if (err) console.log(err);
           });
           const options = {
@@ -208,7 +210,7 @@ module.exports = {
           };
           var qrCode = "";
           await cloudinary.uploader
-            .upload("public/qr.jpg", options)
+            .upload(qrImagePath, options)
             .then((result) => {
               qrCode = result.url;
             });
@@ -231,7 +233,8 @@ module.exports = {
           );
         }
       } else if (transactionStatus === "settlement") {
-        qr.toFile("public/qr.jpg", orderId, function (err) {
+        const qrImagePath = path.join(__dirname, "qrcode.png");
+        qr.toFile(qrImagePath, orderId, function (err) {
           if (err) console.log(err);
         });
         const options = {
@@ -239,7 +242,7 @@ module.exports = {
         };
         var qrCode = "";
         await cloudinary.uploader
-          .upload("public/qr.jpg", options)
+          .upload(qrImagePath, options)
           .then((result) => {
             qrCode = result.url;
           });
