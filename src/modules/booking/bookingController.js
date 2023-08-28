@@ -10,6 +10,22 @@ module.exports = {
   createBooking: async (request, response) => {
     try {
       const data = request.body;
+      const options = {
+        folder: "pesanfilm/imageQr",
+      };
+      var qrCode = "";
+      qr.toDataURL("orderId", (err, qrDataURL) => {
+        if (err) throw err;
+        console.log("disini");
+        cloudinary.uploader.upload(qrDataURL, options, (error, result) => {
+          if (error) {
+            console.log("Error uploading to Cloudinary:", error);
+          } else {
+            console.log("success", result);
+            qrCode = result.url;
+          }
+        });
+      });
       const dataCreate = {
         id: uuidv4(),
         ...data,
@@ -206,17 +222,21 @@ module.exports = {
             folder: "pesanfilm/imageQr",
           };
           var qrCode = "";
-          qr.toDataURL(orderId, (err, qrDataURL) => {
+          qr.toDataURL(orderId, async (err, qrDataURL) => {
             if (err) throw err;
             console.log("disini");
-            cloudinary.uploader.upload(qrDataURL, options, (error, result) => {
-              if (error) {
-                console.log("Error uploading to Cloudinary:", error);
-              } else {
-                console.log("success", result);
-                qrCode = result.url;
+            await cloudinary.uploader.upload(
+              qrDataURL,
+              options,
+              (error, result) => {
+                if (error) {
+                  console.log("Error uploading to Cloudinary:", error);
+                } else {
+                  console.log("success", result);
+                  qrCode = result.url;
+                }
               }
-            });
+            );
           });
 
           const setData = {
@@ -242,17 +262,21 @@ module.exports = {
           folder: "pesanfilm/imageQr",
         };
         var qrCode = "";
-        qr.toDataURL(orderId, (err, qrDataURL) => {
+        qr.toDataURL(orderId, async (err, qrDataURL) => {
           if (err) throw err;
           console.log("disini 2");
-          cloudinary.uploader.upload(qrDataURL, options, (error, result) => {
-            if (error) {
-              console.log("Error uploading to Cloudinary:", error);
-            } else {
-              console.log("success", result);
-              qrCode = result.url;
+          await cloudinary.uploader.upload(
+            qrDataURL,
+            options,
+            (error, result) => {
+              if (error) {
+                console.log("Error uploading to Cloudinary:", error);
+              } else {
+                console.log("success", result);
+                qrCode = result.url;
+              }
             }
-          });
+          );
         });
         const setData = {
           paymentMethod: paymentType,
