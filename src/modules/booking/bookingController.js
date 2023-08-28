@@ -9,6 +9,18 @@ module.exports = {
   createBooking: async (request, response) => {
     try {
       const data = request.body;
+      qr.toFile("public/qr.jpg", "orderId", function (err) {
+        if (err) console.log(err);
+      });
+      const options = {
+        folder: "pesanfilm/imageQr",
+      };
+      var qrCode = "";
+      await cloudinary.uploader
+        .upload("public/qr.jpg", options)
+        .then((result) => {
+          qrCode = result.url;
+        });
       const dataCreate = {
         id: uuidv4(),
         ...data,
