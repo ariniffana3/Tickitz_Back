@@ -205,21 +205,17 @@ module.exports = {
             folder: "pesanfilm/imageQr",
           };
           var qrCode = "";
-          qr.toDataURL(orderId, async (err, qrDataURL) => {
+          qr.toDataURL(orderId, (err, qrDataURL) => {
             if (err) throw err;
 
-            await cloudinary.uploader.upload(
-              qrDataURL,
-              options,
-              (error, result) => {
-                if (error) {
-                  console.error("Error uploading to Cloudinary:", error);
-                } else {
-                  console.log("success", result);
-                  qrCode = result.url;
-                }
+            cloudinary.uploader.upload(qrDataURL, options, (error, result) => {
+              if (error) {
+                console.error("Error uploading to Cloudinary:", error);
+              } else {
+                console.log("success", result);
+                qrCode = result.url;
               }
-            );
+            });
           });
 
           const setData = {
@@ -244,21 +240,17 @@ module.exports = {
           folder: "pesanfilm/imageQr",
         };
         var qrCode = "";
-        await qr.toDataURL(orderId, async (err, qrDataURL) => {
+        qr.toDataURL(orderId, (err, qrDataURL) => {
           if (err) throw err;
 
-          await cloudinary.uploader.upload(
-            qrDataURL,
-            options,
-            (error, result) => {
-              if (error) {
-                console.error("Error uploading to Cloudinary:", error);
-              } else {
-                console.log("success", result);
-                qrCode = result.url;
-              }
+          cloudinary.uploader.upload(qrDataURL, options, (error, result) => {
+            if (error) {
+              console.error("Error uploading to Cloudinary:", error);
+            } else {
+              console.log("success", result);
+              qrCode = result.url;
             }
-          );
+          });
         });
         const setData = {
           paymentMethod: paymentType,
