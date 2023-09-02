@@ -4,8 +4,8 @@ module.exports = {
   getCountSchedule: (searchMovieId, searchLocation) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(*) AS total FROM schedule WHERE  location like '%${searchLocation}%' AND movieId =? `,
-        [searchMovieId],
+        `SELECT COUNT(*) AS total FROM schedule WHERE location like '%${searchLocation}%'
+        AND movieId like '%${searchMovieId}%'`,
         (error, result) => {
           if (!error) {
             resolve(result[0].total);
@@ -38,8 +38,10 @@ module.exports = {
         mv.duration,
         mv.synopsis
         FROM schedule AS sc JOIN movie AS mv  
-        ON sc.movieId = mv.id WHERE location like '%${searchLocation}%' AND movieId=? ORDER BY ${sort} LIMIT ? OFFSET ?`,
-        [searchMovieId, limit, offset],
+        ON sc.movieId = mv.id WHERE sc.location like '%${searchLocation}%' 
+        AND sc.movieId like '%${searchMovieId}%'
+        ORDER BY ${sort} LIMIT ? OFFSET ?`,
+        [limit, offset],
         (error, result) => {
           if (!error) {
             resolve(result);

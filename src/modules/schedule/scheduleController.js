@@ -11,7 +11,7 @@ module.exports = {
       limit = Number(limit);
       page = page || 1;
       limit = limit || 3;
-      sort = sort || "RAND()";
+      sort = sort || "id";
       searchMovieId = searchMovieId || "";
       searchLocation = searchLocation || "";
       const offset = page * limit - limit;
@@ -53,6 +53,7 @@ module.exports = {
         pageInfo
       );
     } catch (error) {
+      console.log(error);
       return helperWrapper.response(response, 400, "bad request", null);
     }
   },
