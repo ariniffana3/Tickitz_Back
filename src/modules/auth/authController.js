@@ -10,7 +10,6 @@ const redis = require("../../config/redis");
 module.exports = {
   register: async (request, response) => {
     try {
-      // eslint-disable-next-line prefer-const
       let { firstName, lastName, noTelp, email, password } = request.body;
       const checkEmail = await authModel.getUserByEmail(email);
       if (checkEmail.length >= 1 && checkEmail[0].status === "active") {
@@ -45,52 +44,10 @@ module.exports = {
       };
 
       await sendMail(setSendEmail)
-        .then((info) => {
-          // console.log(info);
-          // {
-          //   accepted: [ 'budii@gmail.com' ],
-          //   rejected: [],
-          //   envelopeTime: 918,
-          //   messageTime: 648,
-          //   messageSize: 938,
-          //   response: '250 2.0.0 OK  1649593869 d6-20020a056a00244600b004f701135460sm33461743pfj.146 - gsmtp',
-          //   envelope: { from: 'anaffiadiysor@gmail.com', to: [ 'budii@gmail.com' ] },
-          //   messageId: '<fb204455-ae11-3156-2424-15847275a249@gmail.com>'
-          // }
-        })
+        .then((info) => {})
         .catch((error) =>
           helperWrapper.response(response, 403, error.message, null)
         );
-      // console.log(resultSendMail);
-
-      // jika menggunakan nodemailer
-      // const transporter = nodemailer.createTransport({
-      //   service: "gmail",
-      //   auth: {
-      //     user: `${process.env.EMAIL}`,
-      //     pass: `${process.env.PASSEMAIL}`,
-      //   },
-      // });
-
-      // const token = jwt.sign({ email }, "RAHASIA2", { expiresIn: "2h" });
-
-      // const mailOptions = {
-      //   from: `${process.env.EMAIL}`,
-      //   to: email,
-      //   subject: "Pesanfilm email verification",
-      //   text: `copy this token quickly, its will expired in 2 hours ${token}`,
-      // };
-
-      // transporter.sendMail(mailOptions, (err) => {
-      //   if (err) {
-      //     return helperWrapper.response(
-      //       response,
-      //       400,
-      //       "cannot verify this account",
-      //       null
-      //     );
-      //   }
-      // });
       if (checkEmail.length >= 1 && checkEmail[0].status === "notActive") {
         return helperWrapper.response(
           response,
@@ -112,7 +69,6 @@ module.exports = {
   activation: async (request, response) => {
     try {
       let { token } = request.params;
-      // try cacth token dari request.params
       if (!token) {
         return helperWrapper.response(
           response,

@@ -34,12 +34,11 @@ module.exports = {
         `src/templates/email/${data.template}`,
         "utf8"
       );
-      //   console.log(fileTemplate);
 
       const mailOptions = {
-        from: '"PesanFilm" <anaffiadiysor@gmail.com>', // sender address
-        to: data.to, // list of receivers
-        subject: data.subject, // Subject line
+        from: '"PesanFilm" <anaffiadiysor@gmail.com>',
+        to: data.to,
+        subject: data.subject,
         html: mustache.render(fileTemplate, { ...data }),
       };
 

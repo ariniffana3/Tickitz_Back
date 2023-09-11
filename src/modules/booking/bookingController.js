@@ -146,7 +146,6 @@ module.exports = {
       }
 
       const seat = data.map((item) => item.seat);
-      // eslint-disable-next-line no-unused-expressions
       data.length > 1 ? (data = { ...data[0], seat }) : data;
       return helperWrapper.response(response, 200, "succes get data !", data);
     } catch (error) {

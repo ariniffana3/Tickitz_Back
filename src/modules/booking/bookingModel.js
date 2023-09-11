@@ -115,7 +115,6 @@ module.exports = {
         JOIN movie AS mv ON sc.movieId COLLATE utf8mb4_unicode_ci = mv.Id WHERE bk.Id = ?
 `,
         id,
-        // SELECT bk.id, bk.scheduleId, bk.dateBooking, bk.timeBooking, bk.totalTicket, bk.totalPayment, bk.paymentMethod, bk.statusPayment, bk.statusUsed, bks.seat, bk.createdAt, bk.updatedAt, mv.name, mv.category FROM booking AS bk JOIN bookingSeat AS bks ON bk.id=bks.bookingId JOIN schedule AS sc ON bk.scheduleId = sc.id JOIN movie AS mv ON sc.movieId = mv.Id WHERE bk.Id =3;
         (error, result) => {
           if (!error) {
             resolve(result);

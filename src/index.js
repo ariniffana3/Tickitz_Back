@@ -12,7 +12,6 @@ const routerNavigation = require("./routes/index");
 const app = express();
 const port = process.env.PORT;
 
-// midleware
 app.use(morgan("dev"));
 app.use(cors());
 app.options("*", cors());

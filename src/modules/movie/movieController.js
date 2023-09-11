@@ -59,7 +59,6 @@ module.exports = {
           null
         );
       }
-      // console.log(request.decodeToken);
       return helperWrapper.response(
         response,
         200,
@@ -93,16 +92,6 @@ module.exports = {
   },
   createMovie: async (request, response) => {
     try {
-      // console.log(request.file); berisi
-      // {
-      //   fieldname: 'image',
-      //   originalname: 'Brown >\x0E.jpg',
-      //   encoding: '7bit',
-      //   mimetype: 'image/jpeg',
-      //   path: 'https://res.cloudinary.com/dabzupph0/image/upload/v1648767561/pesanfilm/bcnafemqhuw34dxbpahh.jpg',
-      //   size: 163867,
-      //   filename: 'pesanfilm/bcnafemqhuw34dxbpahh'
-      // }
       const {
         name,
         category,
@@ -182,14 +171,7 @@ module.exports = {
             }
           }
         );
-        // newData = {
-        //   ...newData,
-        //   image: `${request.file.filename}.${
-        //     request.file.mimetype.split("/")[1]
-        //   }`,
-        // };
       }
-      // eslint-disable-next-line no-restricted-syntax
       for (const data in newData) {
         if (!newData[data]) {
           delete newData[data];

@@ -126,7 +126,6 @@ module.exports = {
         time,
         updatedAt: new Date(Date.now()),
       };
-      // eslint-disable-next-line no-restricted-syntax
       for (const data in newData) {
         if (!newData[data]) {
           delete newData[data];
