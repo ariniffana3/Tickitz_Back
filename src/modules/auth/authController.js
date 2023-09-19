@@ -159,9 +159,7 @@ module.exports = {
         if (error) {
           return helperWrapper.response(response, 400, error.message, null);
         }
-        // eslint-disable-next-line no-param-reassign
         delete result.iat;
-        // eslint-disable-next-line no-param-reassign
         delete result.exp;
         const token = jwt.sign({ result }, "RAHASIA", { expiresIn: "24h" });
         const newRefreshToken = jwt.sign(result, "RAHASIABARU", {
