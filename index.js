@@ -13,15 +13,6 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(cors());
-app.use(morgan("dev"));
-app.options("*", cors());
-app.use(helmet());
-app.use(xss());
-app.use(compression());
-app.use(bodyParser.urlencoded({ extend: false }));
-app.use(bodyParser.json());
-app.use(express.static("public"));
-//---
 app.use(function (req, res, next) {
   //Enabling CORS
   res.header("Access-Control-Allow-Origin", "*");
@@ -32,6 +23,15 @@ app.use(function (req, res, next) {
   );
   next();
 });
+app.use(morgan("dev"));
+app.options("*", cors());
+app.use(helmet());
+app.use(xss());
+app.use(compression());
+app.use(bodyParser.urlencoded({ extend: false }));
+app.use(bodyParser.json());
+app.use(express.static("public"));
+//---
 
 app.use("/", routerNavigation);
 
