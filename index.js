@@ -12,14 +12,8 @@ const routerNavigation = require("./src/routes/index");
 const app = express();
 const port = process.env.PORT;
 
-const corsOptions = {
-  origin: "*",
-  credentials: true,
-  optionSuccessStatus: 200,
-};
-
+app.use(cors());
 app.use(morgan("dev"));
-app.use(cors(corsOptions));
 app.options("*", cors());
 app.use(helmet());
 app.use(xss());
